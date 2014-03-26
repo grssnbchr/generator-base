@@ -34,7 +34,7 @@ var BaseGenerator = yeoman.generators.Base.extend({
      name: 'features',
      message: 'What more would you like?',
      choices: [{
-       name: 'Bootstrap',
+       name: 'Bootstrap (including respond.js)',
        value: 'includeBootstrap',
        checked: true
      }]
@@ -54,9 +54,10 @@ var BaseGenerator = yeoman.generators.Base.extend({
   writeIndex: function() {
     this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), 'index.html'));
     this.indexFile = this.engine(this.indexFile, this);
-    // wire Bootstrap plugins
+    // wire Bootstrap plugins, and also wire respond.js
     if (this.includeBootstrap) {
       var bs = 'bower_components/bootstrap/js/';
+      var respond = 'bower_components/respond/src/';
       this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
         bs + 'affix.js',
         bs + 'alert.js',
@@ -69,7 +70,8 @@ var BaseGenerator = yeoman.generators.Base.extend({
         bs + 'carousel.js',
         bs + 'scrollspy.js',
         bs + 'collapse.js',
-        bs + 'tab.js'
+        bs + 'tab.js',
+	respond + 'respond.js'
       ]);
     }
   },
