@@ -102,6 +102,60 @@ module.exports = function (grunt) {
             ],
             uglify: true
         },
+
+	// Minification, Uglification, etc.
+	// 
+	//
+        // Reads HTML for usemin blocks to enable smart builds that automatically
+        // concat, minify and revision files. Creates configurations in memory so
+        // additional tasks can operate on them
+        useminPrepare: {
+            options: {
+                dest: '<%%= config.dist %>'
+            },
+            html: '<%%= config.app %>/index.html'
+        },
+
+        // Performs rewrites based on rev and the useminPrepare configuration
+        usemin: {
+            options: {
+                assetsDirs: ['<%%= config.dist %>', '<%%= config.dist %>/images']
+            },
+            html: ['<%%= config.dist %>/{,*/}*.html'],
+            css: ['<%%= config.dist %>/styles/{,*/}*.css']
+        },
+	
+	// Copy the rest of the files
+	// 
+	
+        // Copies remaining files to places other tasks can use
+        copy: {
+            dist: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%%= config.app %>',
+                    dest: '<%%= config.dist %>',
+                    src: [
+                        //'*.{ico,png,txt}',
+                        //'.htaccess',
+                        //'images/{,*/}*.webp',
+                        '{,*/}*.html',
+                        'styles/fonts/{,*/}*.*'<% if (includeBootstrap) { %>,
+                        'bower_components/bootstrap/dist/fonts/*.*'<% } %>
+                    ]
+                }]
+            },
+            //styles: {
+            //    expand: true,
+            //    dot: true,
+            //    cwd: '<%%= config.app %>/styles',
+            //    dest: '.tmp/styles/',
+            //    src: '{,*/}*.css'
+            //}
+        },
+
+	// End of grunt.initConfig
     });
     grunt.registerTask('serve', function (target) {
         grunt.task.run([
@@ -119,16 +173,16 @@ module.exports = function (grunt) {
     });
     grunt.registerTask('build', [
        'clean:dist',
-       // 'useminPrepare',
+       'useminPrepare',
        // 'concurrent:dist',
        // 'autoprefixer',
-       // 'concat',
-       // 'cssmin',
-       // 'uglify',
-       // 'copy:dist',
+       'concat',
+       'cssmin',
+       'uglify',
+       'copy:dist',
        'modernizr',
        // 'rev',
-       // 'usemin',
+       'usemin',
        // 'htmlmin'
     ]);
 }
