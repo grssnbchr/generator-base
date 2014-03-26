@@ -89,7 +89,19 @@ module.exports = function (grunt) {
                 }]
             },
             server: '.tmp'
-        }
+        },
+        // Generates a custom Modernizr build that includes only the tests you
+        // reference in your app
+        modernizr: {
+            devFile: '<%%= config.app %>/bower_components/modernizr/modernizr.js',
+            outputFile: '<%%= config.dist %>/scripts/vendor/modernizr.js',
+            files: [
+                '<%%= config.dist %>/scripts/{,*/}*.js',
+                '<%%= config.dist %>/styles/{,*/}*.css',
+                '!<%%= config.dist %>/scripts/vendor/*'
+            ],
+            uglify: true
+        },
     });
     grunt.registerTask('serve', function (target) {
         grunt.task.run([
@@ -105,4 +117,18 @@ module.exports = function (grunt) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
         grunt.task.run([target ? ('serve:' + target) : 'serve']);
     });
+    grunt.registerTask('build', [
+       'clean:dist',
+       // 'useminPrepare',
+       // 'concurrent:dist',
+       // 'autoprefixer',
+       // 'concat',
+       // 'cssmin',
+       // 'uglify',
+       // 'copy:dist',
+       'modernizr',
+       // 'rev',
+       // 'usemin',
+       // 'htmlmin'
+    ]);
 }
