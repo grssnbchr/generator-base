@@ -30,19 +30,54 @@ var BaseGenerator = yeoman.generators.Base.extend({
      // name: 'someOption',
      // message: 'Would you like to enable this option?',
      // default: true
+     type: 'checkbox',
+     name: 'features',
+     message: 'What more would you like?',
+     choices: [{
+       name: 'Bootstrap',
+       value: 'includeBootstrap',
+       checked: true
+     }]
     }];
 
-    //this.prompt(prompts, function (props) {
-    //  this.someOption = props.someOption;
+    this.prompt(prompts, function (props) {
+      var features = props.features;
 
-    //  done();
-    //}.bind(this));
-    done();
+      function hasFeature(feat) { return features.indexOf(feat) !== -1; }
+
+      this.includeBootstrap = hasFeature('includeBootstrap');
+
+      done();
+    }.bind(this));
   },
 
   writeIndex: function() {
     this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), 'index.html'));
     this.indexFile = this.engine(this.indexFile, this);
+    // wire Bootstrap plugins
+    if (this.includeBootstrap) {
+      var bs = 'bower_components/bootstrap/js/';
+      this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
+        bs + 'affix.js',
+        bs + 'alert.js',
+        bs + 'dropdown.js',
+        bs + 'tooltip.js',
+        bs + 'modal.js',
+        bs + 'transition.js',
+        bs + 'button.js',
+        bs + 'popover.js',
+        bs + 'carousel.js',
+        bs + 'scrollspy.js',
+        bs + 'collapse.js',
+        bs + 'tab.js'
+      ]);
+    }
+  },
+
+  // Copy the stylesheet template
+  mainStylesheet: function () {
+    var css = 'main.' /*+ (this.includeCompass ? 's' : '')*/ + 'css';
+    this.copy(css, 'app/styles/' + css);
   },
 
   app: function () {

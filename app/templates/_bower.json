@@ -1,8 +1,9 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "dependencies": {
-	"modernizr": "~2.6.2"
+  "dependencies": {<% if (includeBootstrap) { %>
+    "bootstrap": "~3.0.3",<% } %>
+    "modernizr": "~2.6.2"
   }
 }
 
