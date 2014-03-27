@@ -119,15 +119,51 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
             options: {
-                assetsDirs: ['<%%= config.dist %>', '<%%= config.dist %>/images']
+                assetsDirs: ['<%%= config.dist %>' /*,'<%%= config.dist %>/images'*/]
             },
             html: ['<%%= config.dist %>/{,*/}*.html'],
             css: ['<%%= config.dist %>/styles/{,*/}*.css']
+        },
+
+        htmlmin: {
+            dist: {
+                options: {
+                    collapseBooleanAttributes: true,
+                    collapseWhitespace: true,
+                    removeAttributeQuotes: true,
+                    removeCommentsFromCDATA: true,
+                    removeEmptyAttributes: true,
+                    removeOptionalTags: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%%= config.dist %>',
+                    src: '{,*/}*.html',
+                    dest: '<%%= config.dist %>'
+                }]
+            }
         },
 	
 	// Copy the rest of the files
 	// 
 	
+        // Renames files for browser caching purposes
+        rev: {
+            dist: {
+                files: {
+                    src: [
+                        '<%%= config.dist %>/scripts/{,*/}*.js',
+                        '<%%= config.dist %>/styles/{,*/}*.css',
+                        '<%%= config.dist %>/images/{,*/}*.*',
+                        '<%%= config.dist %>/styles/fonts/{,*/}*.*',
+                        '<%%= config.dist %>/*.{ico,png}'
+                    ]
+                }
+            }
+        },
+
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
@@ -155,9 +191,28 @@ module.exports = function (grunt) {
             //}
         },
 
+	// JSHINT
+	//
+	//
+	// Make sure code styles are up to par and there are no obvious mistakes
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
+            },
+            all: [
+                //'Gruntfile.js',
+                '<%%= config.app %>/scripts/{,*/}*.js',
+                '!<%%= config.app %>/scripts/vendor/*',
+                'test/spec/{,*/}*.js'
+            ]
+        }
 	// End of grunt.initConfig
     });
     grunt.registerTask('serve', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['build', 'connect:dist:keepalive']);
+        }
         grunt.task.run([
             'clean:server',
             //'concurrent:server',
@@ -181,8 +236,10 @@ module.exports = function (grunt) {
        'uglify',
        'copy:dist',
        'modernizr',
-       // 'rev',
-       'usemin',
-       // 'htmlmin'
+       'rev',
+       'usemin'
+       <% if(htmlminify) { %>,
+       'htmlmin'
+       <% } %>
     ]);
 }

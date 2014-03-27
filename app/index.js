@@ -38,6 +38,12 @@ var BaseGenerator = yeoman.generators.Base.extend({
        value: 'includeBootstrap',
        checked: true
      }]
+     },
+     {
+     type: 'confirm',
+     name: 'htmlmin',
+     message: 'Should HTML be minified, too?',
+     default: false
     }];
 
     this.prompt(prompts, function (props) {
@@ -46,6 +52,8 @@ var BaseGenerator = yeoman.generators.Base.extend({
       function hasFeature(feat) { return features.indexOf(feat) !== -1; }
 
       this.includeBootstrap = hasFeature('includeBootstrap');
+
+      this.htmlminify = props.htmlmin;
 
       done();
     }.bind(this));
@@ -74,6 +82,14 @@ var BaseGenerator = yeoman.generators.Base.extend({
 	respond + 'respond.js'
       ]);
     }
+    // Append main script after plugins.js
+    this.indexFile = this.appendFiles({
+      html: this.indexFile,
+      fileType: 'js',
+      optimizedPath: 'scripts/main.js',
+      sourceFileList: ['scripts/main.js'],
+      searchPath: '{app,.tmp}'
+    });
   },
 
   // Copy the stylesheet template
@@ -95,6 +111,8 @@ var BaseGenerator = yeoman.generators.Base.extend({
     this.copy('_bower.json', 'bower.json');
     this.copy('bowerrc', '.bowerrc');
     this.template('Gruntfile.js');
+    // Copy main.js script template
+    this.copy('main.js','app/scripts/main.js');   
   },
 
   projectfiles: function () {
