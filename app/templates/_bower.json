@@ -4,7 +4,9 @@
   "dependencies": {<% if (includeBootstrap) { %>
     "bootstrap": "~3.0.3",
     "respond": "~1.4.2",<% } %>
-    "modernizr": "~2.6.2"
+    "modernizr": "~2.6.2",
+    "d3": "~3.3.13",
+    "colorbrewer": "1.0.0"
   }
 }
 

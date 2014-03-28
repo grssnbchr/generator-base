@@ -113,6 +113,9 @@ var BaseGenerator = yeoman.generators.Base.extend({
     this.template('Gruntfile.js');
     // Copy main.js script template
     this.copy('main.js','app/scripts/main.js');   
+
+    // Copy base stylesheet
+    this.copy('base.css','app/styles/base.css');
   },
 
   projectfiles: function () {
