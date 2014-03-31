@@ -36,8 +36,8 @@ module.exports = function (grunt) {
                 files: ['Gruntfile.js']
             },
             styles: {
-                files: ['<%%= config.app %>/styles/{,*/}*.css'],
-                tasks: ['newer:copy:styles']
+                files: ['<%%= config.app %>/styles/{,*/}*.css']
+                //tasks: ['newer:copy:styles']
             },
             livereload: {
                 options: {
@@ -46,6 +46,7 @@ module.exports = function (grunt) {
                 files: [
                     '<%%= config.app %>/{,*/}*.html',
                     '.tmp/styles/{,*/}*.css',
+		    '<%%= config.app %>/styles/{,*/}*',
                     '<%%= config.app %>/images/{,*/}*'
                 ]
             }
