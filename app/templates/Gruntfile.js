@@ -182,13 +182,13 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
-            //styles: {
-            //    expand: true,
-            //    dot: true,
-            //    cwd: '<%%= config.app %>/styles',
-            //    dest: '.tmp/styles/',
-            //    src: '{,*/}*.css'
-            //}
+            styles: {
+                expand: true,
+                dot: true,
+                cwd: '<%%= config.app %>/styles',
+                dest: '.tmp/styles/',
+                src: '{,*/}*.css'
+            }
         },
 
 	// JSHINT
